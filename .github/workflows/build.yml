@@ -1,0 +1,25 @@
+name: Build SpaceX capstone evidence
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python analysis.py
+      - name: Build evidence PDF
+        run: python make_report.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spacex-capstone-evidence
+          path: |
+            evidence/
+            Data Science Capstone Project Report.pdf
